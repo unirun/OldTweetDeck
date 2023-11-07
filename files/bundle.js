@@ -22185,9 +22185,7 @@ document.body.addEventListener("click", function (e) {
 		v = i(19),
 		T = y(i(840)),
 		w = i(841),
-		b = i(168),
-		tweetUtil = i(230),
-		configUtil = i(360);
+		b = i(168);
 
 	function y(e) {
 		return e && e.__esModule ? e : {
