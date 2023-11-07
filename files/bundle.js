@@ -22225,13 +22225,12 @@ document.body.addEventListener("click", function (e) {
 		} else this.withPrettyEngagements = !1
 	}, TD.services.TwitterStatus.prototype._generateHTMLText = function() {
 		this.htmlText = TD.util.transform(this.text, this.entities);
-		let cleanText = this.text.replace(/\shttps:\/\/t.co\/[a-zA-Z0-9\-]{8,10}$/, "");
-		if(cleanText.endsWith("…")) {
-			var tweetLength = tweetUtil.getTweetLength(this.text.trim(), configUtil.getConfiguration());
-			if(tweetLength >= 275 && tweetLength < 400) {
-				let id = this.retweetedStatus ? this.retweetedStatus.id : this.id;
-				this.htmlText += ` <a href="https://twitter.com/${this.user.screenName}/status/${id}" onclick="expandTweet(event, '${id}')">Expand tweet</a>`;
-			};
+		const urlsInText = this.text.match(/https:\/\/t.co\/[a-zA-Z0-9\-]{8,10}/g) || [];
+		const endsWithEllipsis = this.text.replace(/https:\/\/t.co\/[a-zA-Z0-9\-]{8,10}/g, "").trim().endsWith("…");
+		const isExpandable = endsWithEllipsis && urlsInText.some(urlInText => !this.entities.urls.some(entityUrl => entityUrl.url === urlInText))
+		if (isExpandable) {
+			let id = this.retweetedStatus ? this.retweetedStatus.id : this.id;
+			this.htmlText += ` <a href="https://twitter.com/${this.user.screenName}/status/${id}" onclick="expandTweet(event, '${id}')">Expand tweet</a>`;
 		}
 	}, TD.services.TwitterStatus.prototype.getMainUser = function() {
 		return this.retweetedStatus ? this.retweetedStatus.user : this.user
